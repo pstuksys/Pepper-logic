@@ -2,6 +2,7 @@ import { useCallback, useContext } from "react";
 import { KanbanContext } from "../../hooks/kanban-context";
 import { DragDropContext, Draggable, Droppable, DropResult, OnDragEndResponder } from "react-beautiful-dnd";
 import Column from "./components/column/column";
+import styled from "styled-components";
 
 const KanbanBoard = () => {
   const {columns, setColumns} = useContext(KanbanContext);
@@ -38,14 +39,20 @@ const KanbanBoard = () => {
   return (
     <DragDropContext  
       onDragEnd={onDragEnd}>
-        <div style={{display:'flex'}}>
+        <Container>
           {columnData.map((columnId)=>(
            <Column key={columnId} columnId={columnId} tasks={columns[columnId]} />
           ))}
-        </div>
+        </Container>
           
     </DragDropContext>
   )
 }
 
 export default KanbanBoard;
+
+const Container = styled.div`
+  display: flex;
+  border-radius: 20px;
+ box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+`

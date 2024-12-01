@@ -1,7 +1,6 @@
-import { useContext } from "react"
-import { KanbanContext, NKanbanContext } from "../../../../hooks/kanban-context"
 import { Droppable } from "react-beautiful-dnd";
 import Coin from "../coin/coin";
+import styled from "styled-components";
 
 type TColumnProps = {
     columnId: string;
@@ -16,11 +15,10 @@ const Column = (props:TColumnProps) => {
     <div>
      <Droppable droppableId={columnId}>
         {(provided) => (
-        <div
+        <Container
             ref={provided.innerRef}
             {...provided.droppableProps}
             className="kanban-column"
-            style={{ margin: '10px', width: '250px' }}
         >
             <h2>{columnId.toUpperCase()}</h2>
 
@@ -29,11 +27,18 @@ const Column = (props:TColumnProps) => {
             ))}
 
             {provided.placeholder}
-        </div>
+        </Container>
         )}
      </Droppable>
     </div>
   )
 }
 
-export default Column
+export default Column;
+
+const Container = styled.div`
+  margin:20px;
+  width: 250px;
+  max-width:100%;
+  display:grid;
+`
