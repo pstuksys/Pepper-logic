@@ -31,8 +31,13 @@ const KanbanContext = createContext<NKanbanContext.KanbanContextType>({
 const KanbanProvider = (props:NKanbanContext.KanbanProviderProps) =>{
 
     const [columns, setColumns] = useState<NKanbanContext.Columns>({
-        watched: [{id:'e1',content:'bitcoin'}],
-        unwatched: [{content:'ether',id:'e2'}]
+        watched: [
+            {content:'bitcoin',id:'e1'},
+            {content:'ether',id:'e2'},
+            {content:'tether',id:'e3'},
+            {content:'dogeCoin',id:'e4'}
+        ],
+        unwatched: []
       });
 
     return (
