@@ -1,4 +1,5 @@
 import { Draggable } from "react-beautiful-dnd";
+import styled from "styled-components";
 
 type TCoin = {
   task: { id: string; content: string };
@@ -11,25 +12,33 @@ const Coin = (props:TCoin) => {
   return (
     <Draggable key={task.id} draggableId={task.id} index={index}>
     {(provided) => (
-      <div
+      <Container
         ref={provided.innerRef}
         {...provided.draggableProps}
         {...provided.dragHandleProps}
         className="kanban-task"
         style={{
           ...provided.draggableProps.style,
-          margin: '5px 0',
-          padding: '10px',
-          backgroundColor: '#fff',
-          border: '1px solid #ccc',
-          borderRadius: '5px',
         }}
       >
         {task.content}
-      </div>
+      </Container>
     )}
   </Draggable>
   )
 }
 
 export default Coin
+
+const Container = styled.div`
+  width: 100%;
+  max-width:50%;
+  height:100px;
+  border:1px solid #FFD700;
+  background-color: #FFD700;
+  margin:5px 0;
+  border-radius: 50%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+`
