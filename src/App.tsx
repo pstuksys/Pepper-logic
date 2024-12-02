@@ -1,7 +1,13 @@
+import KanbanBoard from "./components/kanban/kanban-board";
+import { KanbanProvider } from "./hooks/kanban-context";
+
+
 const App = () => {
 
   return (
-    <div>Hello, TypeScript + React</div>
+    <KanbanProvider>
+      <KanbanBoard/>
+    </KanbanProvider>
   )
 }
 

@@ -8,5 +8,5 @@
       "strict": true,
       "esModuleInterop": true
     },
-    "include": ["src", "custom.d.ts", "eslint.config.mjs"]
+    "include": ["src", "custom.d.ts", "eslint.config.mjs", "src/api", "server/crypto-server.js"]
   }
