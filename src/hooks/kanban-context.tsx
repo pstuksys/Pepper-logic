@@ -4,6 +4,7 @@ export namespace NKanbanContext {
     interface Task {
         id: string;
         content: string;
+        code:string;
     }
 
     export interface Columns {
@@ -22,8 +23,8 @@ export namespace NKanbanContext {
 const KanbanContext = createContext<NKanbanContext.KanbanContextType>({
     setColumns:()=> {},
     columns:{
-        watched: [{id:'e1',content:'bitcoin'}],
-        unwatched: [{content:'ether',id:'e2'}]
+        watched: [{id:'e1',content:'bitcoin', code:'BTC'}],
+        unwatched: []
     }
 });
 
@@ -31,13 +32,13 @@ const KanbanContext = createContext<NKanbanContext.KanbanContextType>({
 const KanbanProvider = (props:NKanbanContext.KanbanProviderProps) =>{
 
     const [columns, setColumns] = useState<NKanbanContext.Columns>({
-        watched: [
-            {content:'bitcoin',id:'e1'},
-            {content:'ether',id:'e2'},
-            {content:'tether',id:'e3'},
-            {content:'dogeCoin',id:'e4'}
+        unwatched: [
+            {content:'bitcoin',id:'e1',code:'BTC'},
+            {content:'ether',id:'e2',code:'ETH'},
+            {content:'tether',id:'e3',code:'TET'},
+            {content:'dogeCoin',id:'e4',code:'DOGE'}
         ],
-        unwatched: []
+        watched: []
       });
 
     return (

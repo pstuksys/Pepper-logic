@@ -1,8 +1,9 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { KanbanContext } from "../../hooks/kanban-context";
-import { DragDropContext, Draggable, Droppable, DropResult, OnDragEndResponder } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import Column from "./components/column/column";
 import styled from "styled-components";
+import axios from "axios";
 
 const KanbanBoard = () => {
   const {columns, setColumns} = useContext(KanbanContext);
@@ -11,7 +12,6 @@ const KanbanBoard = () => {
     const {source,destination,draggableId} = result;
 
     if (!destination) return;
-    console.log({destination,source,draggableId})
 
     const columnInitial = source.droppableId;
     const columnEnd = destination.droppableId;
@@ -22,10 +22,6 @@ const KanbanBoard = () => {
     const [movedTask] = columnStartArr.splice(source.index, 1);
     columnEndArr.splice(destination.index, 0, movedTask);
 
-    console.log({columnStartArr,columnEndArr,movedTask});
-
-    console.log(result)
-
     setColumns({
       ...columns,
       [columnInitial]: columnStartArr,
@@ -35,6 +31,30 @@ const KanbanBoard = () => {
   }, []);
 
   const columnData = (Object.keys(columns) || []);
+
+  const fetchCryptoData = async (code:string[]) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/crypto-server', {
+        code: code,
+        secret:process.env.REACT_APP_API_SECRET_KEY
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(()=>{
+    const cryptoCode = (Object.values(columns['watched']) || []).map((e)=>e.code);
+
+    if(!cryptoCode?.length) return;
+
+    console.log('atejo');
+    fetchCryptoData(cryptoCode);
+
+   console.log(cryptoCode)
+  },[columns])
 
   return (
     <DragDropContext  
