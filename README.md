@@ -14,3 +14,9 @@ REACT_APP_API_SECRET_KEY=to get secret key go https://www.livecoinwatch.com/tool
 3.run 'npm start' command to start dev env.
 4.navigate to server folder via terminal and run command:'node crypto-server.ts' to start express server
 
+
+
+problems to fix:
+1. due to limitation of time couldnt solve the issue why process.env constants was undefined in server so had to send same env constants via frontend just to see if business logic works. needs to be fixed
+2. for charts no websockets used.
+3.Error Management was not implemented.

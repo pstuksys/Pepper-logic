@@ -1,12 +1,19 @@
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { KanbanContext } from "../../hooks/kanban-context";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import Column from "./components/column/column";
 import styled from "styled-components";
 import axios from "axios";
+import Chart, { ChartData, CryptoData } from "./components/chart/chart";
+
+
 
 const KanbanBoard = () => {
+  const [data, setData] = useState<ChartData[]>([]);
   const {columns, setColumns} = useContext(KanbanContext);
+  const [loading,setLoading] = useState<boolean>(false);
+
+  const cryptoCode = (Object.values(columns['watched']) || []).map((e)=>e.code);
 
   const onDragEnd = useCallback((result:DropResult) => {
     const {source,destination,draggableId} = result;
@@ -34,13 +41,31 @@ const KanbanBoard = () => {
 
   const fetchCryptoData = async (code:string[]) => {
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:5000/api/crypto-server', {
         code: code,
         secret:process.env.REACT_APP_API_SECRET_KEY
       });
 
-      console.log(response.data);
+      const result: CryptoData[] =  response.data.data;
+
+      const chartData = (result || []).map((crypto) => ({
+        code: crypto.code,
+        name: crypto.code,
+        price: crypto.rate,
+        hourChange: crypto.delta.hour,
+        dayChange: crypto.delta.day,
+        volume: crypto.volume,
+        cap: crypto.cap,
+        uv: crypto.rate, 
+        pv: crypto.volume,
+      }));
+      
+      setData(chartData);
+      setLoading(false);
+
     } catch (error) {
+      setLoading(false);
       console.error('Error fetching data:', error);
     }
   };
@@ -50,22 +75,26 @@ const KanbanBoard = () => {
 
     if(!cryptoCode?.length) return;
 
-    console.log('atejo');
     fetchCryptoData(cryptoCode);
 
-   console.log(cryptoCode)
   },[columns])
 
+  console.log({data})
+
   return (
-    <DragDropContext  
-      onDragEnd={onDragEnd}>
-        <Container>
-          {columnData.map((columnId)=>(
-           <Column key={columnId} columnId={columnId} tasks={columns[columnId]} />
-          ))}
-        </Container>
-          
-    </DragDropContext>
+    <>
+    {columnData && loading ? <p>Loading...</p> : null}
+    {cryptoCode?.length ? <Chart data={data}/> : null}
+      <DragDropContext  
+        onDragEnd={onDragEnd}>
+          <Container>
+            {columnData.map((columnId)=>(
+              <Column key={columnId} columnId={columnId} tasks={columns[columnId]} />
+            ))}
+          </Container>
+      </DragDropContext>
+      
+    </>
   )
 }
 

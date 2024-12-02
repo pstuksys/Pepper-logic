@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const { HttpStatusCode } = require('axios');
 
 
 dotenv.config();
@@ -46,7 +47,7 @@ app.post(`/api/crypto-server`, async (req, res) => {
 
         console.log({response:response.data});
     
-        res.status(200).json({
+        res.status(HttpStatusCode.Ok).json({
           message: 'Request successful!',
           data: response.data,
         });
